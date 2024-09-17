@@ -1,7 +1,13 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { Item } from '../models/Item';
 
-export default function Product() {
+interface ProductProps {
+  item: Item;
+  dispatch: React.Dispatch<{ type: string, id: number }>;
+}
+
+export default function Product({ item, dispatch }: ProductProps) {
   return (
     <Container>
       <div style={{
@@ -12,7 +18,7 @@ export default function Product() {
       }}>
         <div>
           <img 
-            src={"../../public/images/iPhone.png"}
+            src={item.img}
             alt="iphone16"
             width="100px"
             height="100px"
@@ -20,17 +26,28 @@ export default function Product() {
         </div>
         <DescriptionDiv css={centerOrder}>
           <p>
-            아이폰 16프로
+            제품명 : {item.name}
           </p>
           <p>
-            가격 : 300만원
+            가격 : {item.price}
           </p>
         </DescriptionDiv>
       </div>
         <QuantityControl>
-          <button>-</button>
-          <input type="text" value="1" readOnly />
-          <button>+</button>
+          <button
+            onClick={() => {
+              dispatch({ type: 'decrement', id: item.id });
+            }}
+          >-</button>
+          <input 
+            type="text"
+            value={item.quantity}
+          />
+          <button
+            onClick={() => {
+              dispatch({ type: 'increment', id: item.id });
+            }}
+          >+</button>
         </QuantityControl>
     </Container>
   );
@@ -51,8 +68,8 @@ const Container = styled.div`
 
 const centerOrder = css`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   flex-direction: column;
   gap: 5px;
 `;
